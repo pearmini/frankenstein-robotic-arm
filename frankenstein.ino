@@ -18,16 +18,13 @@
 
 float a1 = 3.5;
 float a2 = 2.5;
-float originalX = 0;
-float originalY = a1 + a2;
+float originalX = 1;
+float originalY = 5.5;
 
 int prevLeftButtonState = LOW;
 int prevRightButtonState = LOW;
 int prevDownButtonState = LOW;
 int prevUpButtonState = LOW;
-
-float prevAngle1 = 90;
-float prevAngle2 = 90;
 
 float leftX = 0;
 float rightX = 0;
@@ -131,10 +128,7 @@ void loop() {
     downY = prevDownY;
   } else {
     faceIndex = 0;
-    // Display simle face if in range, and move the arms.
-    prevAngle1 = t1;
-    prevAngle2 = t2;
-
+    // Display smile face if in range, and move the arms.
     if (millis() - prevMoveTime > 20) {
       downMotor.write(servoAngle1);
       upMotor.write(servoAngle2);
