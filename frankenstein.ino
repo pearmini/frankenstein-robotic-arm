@@ -13,6 +13,9 @@
 
 #define INVALID_POSITION -10
 
+#define MAX_MOVE_SPEED 0.003
+#define MIN_MOVE_SPEED 0.001
+
 float a1 = 3.5;
 float a2 = 2.5;
 float originalX = 0;
@@ -31,7 +34,9 @@ float rightX = 0;
 float downY = 0;
 float upY = 0;
 
-float moveSpeed = 0.002;
+float maxMoveSpeed = 0.004;
+float minMoveSpeed = 0.002;
+float moveSpeed = (minMoveSpeed + maxMoveSpeed) / 2;
 long prevMoveTime = 0;
 
 // *********** For LED Matrix ***********
@@ -90,9 +95,11 @@ void setup() {
 }
 
 void loop() {
+  displayFace(expressions[0]);
+
   float analogValue = analogRead(A0);
-  int index = map(analogValue, 0, 1100, 0, 3);
-  displayFace(expressions[index]);
+  moveSpeed = mapFloat(analogValue, 0.0, 1100.0, minMoveSpeed, maxMoveSpeed);
+  moveSpeed = constrain(moveSpeed, minMoveSpeed, maxMoveSpeed);
 
   updateValueOnButtonPress(LEFT_BUTTON_PIN, prevLeftButtonState, leftX, moveSpeed);
   updateValueOnButtonPress(RIGHT_BUTTON_PIN, prevRightButtonState, rightX, moveSpeed);
@@ -120,24 +127,25 @@ void loop() {
 
 void updateValueOnButtonPress(int pin, int &prevButtonState, float &value, float moveSpeed) {
   int buttonState = digitalRead(pin);
-  if (buttonState == prevButtonState && buttonState == LOW) {
-    value += moveSpeed;
-  }
+  if (buttonState == prevButtonState && buttonState == LOW) value += moveSpeed;
   prevButtonState = buttonState;
 }
 
 void displayFace(byte *face) {
   if (millis() - prevDisplayTime > 500) {
     lc.clearDisplay(0);
-    for (int i = 0; i < 8; i++) {
-      lc.setColumn(0, 7 - i, face[i]);
-    }
+    for (int i = 0; i < 8; i++) lc.setColumn(0, 7 - i, face[i]);
     prevDisplayTime = millis();
   }
 }
 
 float radiansToDegrees(float radians) {
   return radians * (180.0 / M_PI);
+}
+
+float mapFloat(float value, float domainMin, float domainMax, float rangeMin, float rangeMax) {
+  if (domainMin == domainMax) return rangeMin;
+  return rangeMin + (value - domainMin) * (rangeMax - rangeMin) / (domainMax - domainMin);
 }
 
 /**
