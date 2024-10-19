@@ -34,6 +34,11 @@ float rightX = 0;
 float downY = 0;
 float upY = 0;
 
+float prevLeftX = leftX;
+float prevRightX = rightX;
+float prevDownY = downY;
+float prevUpY = upY;
+
 float maxMoveSpeed = 0.004;
 float minMoveSpeed = 0.002;
 float moveSpeed = (minMoveSpeed + maxMoveSpeed) / 2;
@@ -95,7 +100,6 @@ void setup() {
 }
 
 void loop() {
-  displayFace(expressions[0]);
 
   float analogValue = analogRead(A0);
   moveSpeed = mapFloat(analogValue, 0.0, 1100.0, minMoveSpeed, maxMoveSpeed);
@@ -109,20 +113,40 @@ void loop() {
   float currentY = originalY + upY - downY;
 
   float *angles = inverseKinematics(currentX, currentY, a1, a2);
-  float t1 = angles[0] == INVALID_POSITION ? prevAngle1 : angles[0];
-  float t2 = angles[1] == INVALID_POSITION ? prevAngle2 : angles[1];
-  prevAngle1 = t1;
-  prevAngle2 = t2;
-  delete[] angles;
 
-  if (millis() - prevMoveTime > 20) {
-    float angle1 = radiansToDegrees(t1);
-    float angle2 = radiansToDegrees(t2) + angle1;
-    float rotate = 180 - (180 * t2 / M_PI + 180 * t1 / M_PI);
-    downMotor.write(180 - angle1);
-    upMotor.write(180 - angle2);
-    prevMoveTime = millis();
+  // Display sad face if out of range, and restore the right positions.
+  if (angles[0] == INVALID_POSITION) {
+    displayFace(expressions[1]);
+    rightX = prevRightX;
+    leftX = prevLeftX;
+    upY = prevUpY;
+    downY = prevDownY;
+  } else {
+    // Display simle face if in range, and move the arms.
+    displayFace(expressions[0]);
+
+    float t1 = angles[0];
+    float t2 = angles[1];
+    prevAngle1 = t1;
+    prevAngle2 = t2;
+
+    if (millis() - prevMoveTime > 20) {
+      float angle1 = radiansToDegrees(t1);
+      float angle2 = radiansToDegrees(t2) + angle1;
+      float rotate = 180 - (180 * t2 / M_PI + 180 * t1 / M_PI);
+      downMotor.write(180 - angle1);
+      upMotor.write(180 - angle2);
+      prevMoveTime = millis();
+    }
   }
+
+  // Store current positions for restoring.
+  prevRightX = rightX;
+  prevLeftX = leftX;
+  prevUpY = upY;
+  prevDownY = downY;
+
+  delete[] angles;
 }
 
 void updateValueOnButtonPress(int pin, int &prevButtonState, float &value, float moveSpeed) {
@@ -132,7 +156,7 @@ void updateValueOnButtonPress(int pin, int &prevButtonState, float &value, float
 }
 
 void displayFace(byte *face) {
-  if (millis() - prevDisplayTime > 500) {
+  if (millis() - prevDisplayTime > 100) {
     lc.clearDisplay(0);
     for (int i = 0; i < 8; i++) lc.setColumn(0, 7 - i, face[i]);
     prevDisplayTime = millis();
