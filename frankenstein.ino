@@ -54,7 +54,7 @@ Servo downMotor;
 
 LedControl lc = LedControl(DIN_PIN, CLK_PIN, CS_PIN, 1);
 
-long prevDisplayTime = 0;
+int prevFaceIndex = 0;
 
 byte expressions[8][8] = {
   { B00000000,  // Smile Face!
@@ -97,6 +97,8 @@ void setup() {
   lc.shutdown(0, false);
   lc.setIntensity(0, 8);
   lc.clearDisplay(0);
+
+  displayFace(expressions[prevFaceIndex]);
 }
 
 void loop() {
@@ -118,18 +120,18 @@ void loop() {
   float angle2 = radiansToDegrees(t2) + angle1;
   float servoAngle1 = 180 - angle1;
   float servoAngle2 = 180 - angle2;
+  int faceIndex = 0;
 
   // Display sad face if out of range, and restore the right positions.
   if (t1 == INVALID_POSITION || !isValidServoAngle(servoAngle1) || !isValidServoAngle(servoAngle2)) {
-    displayFace(expressions[1]);
+    faceIndex = 1;
     rightX = prevRightX;
     leftX = prevLeftX;
     upY = prevUpY;
     downY = prevDownY;
   } else {
+    faceIndex = 0;
     // Display simle face if in range, and move the arms.
-    displayFace(expressions[0]);
-
     prevAngle1 = t1;
     prevAngle2 = t2;
 
@@ -139,6 +141,9 @@ void loop() {
       prevMoveTime = millis();
     }
   }
+
+  if (prevFaceIndex != faceIndex) displayFace(expressions[faceIndex]);
+  prevFaceIndex = faceIndex;
 
   // Store current positions for restoring.
   prevRightX = rightX;
@@ -156,11 +161,8 @@ void updateValueOnButtonPress(int pin, int &prevButtonState, float &value, float
 }
 
 void displayFace(byte *face) {
-  if (millis() - prevDisplayTime > 100) {
-    lc.clearDisplay(0);
-    for (int i = 0; i < 8; i++) lc.setColumn(0, 7 - i, face[i]);
-    prevDisplayTime = millis();
-  }
+  lc.clearDisplay(0);
+  for (int i = 0; i < 8; i++) lc.setColumn(0, 7 - i, face[i]);
 }
 
 bool isValidServoAngle(float angle) {
