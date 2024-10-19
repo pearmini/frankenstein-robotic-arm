@@ -100,7 +100,6 @@ void setup() {
 }
 
 void loop() {
-
   float analogValue = analogRead(A0);
   moveSpeed = mapFloat(analogValue, 0.0, 1100.0, minMoveSpeed, maxMoveSpeed);
   moveSpeed = constrain(moveSpeed, minMoveSpeed, maxMoveSpeed);
@@ -113,9 +112,15 @@ void loop() {
   float currentY = originalY + upY - downY;
 
   float *angles = inverseKinematics(currentX, currentY, a1, a2);
+  float t1 = angles[0];
+  float t2 = angles[1];
+  float angle1 = radiansToDegrees(t1);
+  float angle2 = radiansToDegrees(t2) + angle1;
+  float servoAngle1 = 180 - angle1;
+  float servoAngle2 = 180 - angle2;
 
   // Display sad face if out of range, and restore the right positions.
-  if (angles[0] == INVALID_POSITION) {
+  if (t1 == INVALID_POSITION || !isValidServoAngle(servoAngle1) || !isValidServoAngle(servoAngle2)) {
     displayFace(expressions[1]);
     rightX = prevRightX;
     leftX = prevLeftX;
@@ -125,17 +130,12 @@ void loop() {
     // Display simle face if in range, and move the arms.
     displayFace(expressions[0]);
 
-    float t1 = angles[0];
-    float t2 = angles[1];
     prevAngle1 = t1;
     prevAngle2 = t2;
 
     if (millis() - prevMoveTime > 20) {
-      float angle1 = radiansToDegrees(t1);
-      float angle2 = radiansToDegrees(t2) + angle1;
-      float rotate = 180 - (180 * t2 / M_PI + 180 * t1 / M_PI);
-      downMotor.write(180 - angle1);
-      upMotor.write(180 - angle2);
+      downMotor.write(servoAngle1);
+      upMotor.write(servoAngle2);
       prevMoveTime = millis();
     }
   }
@@ -161,6 +161,10 @@ void displayFace(byte *face) {
     for (int i = 0; i < 8; i++) lc.setColumn(0, 7 - i, face[i]);
     prevDisplayTime = millis();
   }
+}
+
+bool isValidServoAngle(float angle) {
+  return angle >= 0 && angle <= 180;
 }
 
 float radiansToDegrees(float radians) {
@@ -195,7 +199,7 @@ float *inverseKinematics(float px, float py, float a1, float a2) {
     return angles;
   }
 
-  float s2 = sqrt(1 - c2 * c2);
+  float s2 = -1 * sqrt(1 - c2 * c2);
   float t2 = atan2(s2, c2);
   float t1 = atan2(py, px) - atan2(a2 * s2, a1 + a2 * c2);
 
