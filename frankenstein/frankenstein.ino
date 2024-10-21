@@ -59,7 +59,7 @@ byte expressions[8][8] = {
     B01000010,
     B00111100,
     B00000000 },
-  { B00000000,  // Normal Face!
+  { B00000000,  // Neutral Face!
     B01100110,
     B01100110,
     B00000000,
@@ -97,7 +97,7 @@ void setup() {
 
 void loop() {
   float analogValue = analogRead(A0);
-  moveSpeed = mapFloat(analogValue, 0.0, 1100.0, minMoveSpeed, maxMoveSpeed);
+  moveSpeed = map(analogValue, 0.0, 1100.0, minMoveSpeed, maxMoveSpeed);
   moveSpeed = constrain(moveSpeed, minMoveSpeed, maxMoveSpeed);
 
   updateValueOnButtonPress(LEFT_BUTTON_PIN, prevLeftButtonState, leftX, moveSpeed);
@@ -117,7 +117,10 @@ void loop() {
   int faceIndex = 0;
 
   // Display sad face if out of range, and restore the right positions.
-  if (t1 == INVALID_POSITION || !isValidServoAngle(servoAngle1) || !isValidServoAngle(servoAngle2)) {
+  if (t1 == INVALID_POSITION
+      || !isValidServoAngle(servoAngle1)
+      || !isValidServoAngle(servoAngle2)
+      || currentY < 0) {
     faceIndex = 1;
     rightX = prevRightX;
     leftX = prevLeftX;
