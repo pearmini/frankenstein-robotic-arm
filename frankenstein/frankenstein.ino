@@ -13,9 +13,6 @@
 
 #define INVALID_POSITION -10
 
-#define MAX_MOVE_SPEED 0.003
-#define MIN_MOVE_SPEED 0.001
-
 float a1 = 3.5;
 float a2 = 2.5;
 float originalX = 1;
