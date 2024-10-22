@@ -30,3 +30,8 @@ Some might feel sorry for Frankenstein I because it does not look good, but I’
 ![iron_man](./img/iron_man.png)
 
 Frankenstein I is my first tiny robotic arm. I hope it is a good starting point for my journey in Physical Computing and Robotics.
+
+## Future work
+
+- Dancing with music!
+- Visualize the trace of the two joints!
