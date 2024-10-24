@@ -159,6 +159,7 @@ void displayFace(byte *face) {
   for (int i = 0; i < 8; i++) lc.setColumn(0, 7 - i, face[i]);
 }
 
+// Servo motor only supports 0-180 degrees.
 bool isValidServoAngle(float angle) {
   return angle >= 0 && angle <= 180;
 }
@@ -167,6 +168,7 @@ float radiansToDegrees(float radians) {
   return radians * (180.0 / M_PI);
 }
 
+// Built-in map functions only support integers.
 float mapFloat(float value, float domainMin, float domainMax, float rangeMin, float rangeMax) {
   if (domainMin == domainMax) return rangeMin;
   return rangeMin + (value - domainMin) * (rangeMax - rangeMin) / (domainMax - domainMin);
