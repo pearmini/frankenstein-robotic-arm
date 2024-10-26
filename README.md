@@ -6,6 +6,12 @@ This is my midterm project for Physical Computing. I made a simple robotic arm w
 
 Four pushbuttons control the arm’ position in Cartesian space, while a potentiometer to adjusts its moving speed. When the arm moves outside its workspace, the face turns sad, smiling again when it returns to a valid position.
 
+This project apply following things I learnt recently:
+
+- Digital Input
+- Analog Input
+- Inverse Kinematics
+
 ## Links
 
 For more information, please check out the following link:
