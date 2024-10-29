@@ -33,7 +33,7 @@ float prevRightX = rightX;
 float prevDownY = downY;
 float prevUpY = upY;
 
-float maxMoveSpeed = 0.004;
+float maxMoveSpeed = 0.003;
 float minMoveSpeed = 0.002;
 float moveSpeed = (minMoveSpeed + maxMoveSpeed) / 2;
 long prevMoveTime = 0;
@@ -132,6 +132,7 @@ void loop() {
     if (millis() - prevMoveTime > 20) {
       downMotor.write(servoAngle1);
       upMotor.write(servoAngle2);
+      sendLinksParameters(a1, a2, t1, t2);
       prevMoveTime = millis();
     }
   }
@@ -146,6 +147,11 @@ void loop() {
   prevDownY = downY;
 
   delete[] angles;
+}
+
+void sendLinksParameters(float a1, float a2, float t1, float t2) {
+  String parameters = String(a1) + "," + String(a2) + "," + String(t1) + "," + String(t2);
+  Serial.println(parameters);
 }
 
 void updateValueOnButtonPress(int pin, int &prevButtonState, float &value, float moveSpeed) {
