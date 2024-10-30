@@ -3,13 +3,15 @@
 This is my midterm project for Physical Computing. I made a simple robotic arm with a smiling face. I name it **Frankenstein I**, which symbolizing a creature crafted by a bunch of wasted stuff.
 
 ![cover](./img/cover.png)
+![twins](./img/digital-twins.png)
 
-Four pushbuttons control the arm’ position in Cartesian space, while a potentiometer to adjusts its moving speed. When the arm moves outside its workspace, the face turns sad, smiling again when it returns to a valid position.
+Four pushbuttons control the arm’ position in Cartesian space, while a potentiometer to adjusts its moving speed. When the arm moves outside its workspace, the face turns sad, smiling again when it returns to a valid position. Meanwhile, P5.js will visualize the movements of its joints, which looks like its digital twins!
 
 This project apply following things I learnt recently:
 
 - Digital Input
 - Analog Input
+- Forward Kinematics
 - Inverse Kinematics
 
 ## Links
@@ -18,6 +20,11 @@ For more information, please check out the following link:
 
 - [Video](https://drive.google.com/file/d/1DDYvQkuoxJn31Q663QZJp7O8A2DMUf7v/view) - a simple demonstration
 - [Blog](https://spangle-clutch-0a2.notion.site/Week6-Midterm-Project-1268ad8589b6808fa3a2e3d39f1ea35d) - the design and build process
+
+## Development
+
+- Open `server/frankenstein/frankenstein.ino` by Arduino Nano 33 loT
+- `cd client && npm run dev`
 
 ## Objectives
 
