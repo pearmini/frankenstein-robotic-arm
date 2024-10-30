@@ -1,6 +1,6 @@
 # Frankenstein: My First Tiny Robotic Arm Project
 
-This is my midterm project for Physical Computing. I made a simple robotic arm with a smiling face. I name it **Frankenstein I**, which symbolizing a creature crafted by a bunch of wasted stuff.
+This is my midterm project for Physical Computing. I made a simple robotic arm with a smiling face, and its digital twins! I name it **Frankenstein I**, which symbolizing a creature crafted by a bunch of wasted stuff.
 
 ![cover](./img/cover.png)
 ![twins](./img/digital-twins.png)
