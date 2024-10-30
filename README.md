@@ -18,7 +18,7 @@ This project apply following things I learnt recently:
 
 For more information, please check out the following link:
 
-- [Video](https://drive.google.com/file/d/1DDYvQkuoxJn31Q663QZJp7O8A2DMUf7v/view) - a simple demonstration
+- [Video](https://drive.google.com/file/d/1EBYlqFmFkL-WKsrHmcPTgbw-X46m6Yor/view) - a simple demonstration
 - [Blog](https://spangle-clutch-0a2.notion.site/Week6-Midterm-Project-1268ad8589b6808fa3a2e3d39f1ea35d) - the design and build process
 
 ## Development
@@ -43,8 +43,3 @@ Some might feel sorry for Frankenstein I because it does not look good, but I’
 ![iron_man](./img/iron_man.png)
 
 Frankenstein I is my first tiny robotic arm. I hope it is a good starting point for my journey in Physical Computing and Robotics.
-
-## Future work
-
-- Dancing with music!
-- Visualize the trace of the two joints!
