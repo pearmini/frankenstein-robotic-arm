@@ -9,7 +9,6 @@ let pt2 = null;
 
 const padding = 10;
 const maxLevel = 5;
-const upperParticles = [];
 const particles = [];
 
 const serial = new p5.WebSerial();
@@ -23,7 +22,7 @@ function setup() {
 
 function draw() {
   applyFadeEffect();
-  displayParticles(particles, 165);
+  displayParticles(particles);
 }
 
 function applyFadeEffect() {
